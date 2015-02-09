@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 public class RunManager {
 
@@ -13,6 +14,8 @@ public class RunManager {
 
     public static final String ACTION_LOCATION =
             "com.star.runtracker.ACTION_LOCATION";
+
+    private static final String TEST_PROVIDER = "TEST_PROVIDER";
 
     private static RunManager sRunManager;
 
@@ -45,6 +48,13 @@ public class RunManager {
 
     public void startLocationUpdates() {
         String provider = LocationManager.GPS_PROVIDER;
+
+        if (mLocationManager.getProvider(TEST_PROVIDER) != null &&
+                mLocationManager.isProviderEnabled(TEST_PROVIDER)) {
+            provider = TEST_PROVIDER;
+        }
+
+        Log.d(TAG, "Using provider " + provider);
 
         PendingIntent pi = getLocationPendingIntent(true);
 
