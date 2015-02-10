@@ -60,11 +60,11 @@ public class RunManager {
 
         mLocationManager.requestLocationUpdates(provider, 0, 0, pi);
 
-        Location lastKnow = mLocationManager.getLastKnownLocation(provider);
+        Location lastKnown = mLocationManager.getLastKnownLocation(provider);
 
-        if (lastKnow != null) {
-            lastKnow.setTime(System.currentTimeMillis());
-            broadcastLocation(lastKnow);
+        if (lastKnown != null) {
+            lastKnown.setTime(System.currentTimeMillis());
+            broadcastLocation(lastKnown);
         }
     }
 
