@@ -22,7 +22,7 @@
         <receiver android:name=".LocationReceiver"
                   android:exported="false">
             <intent-filter>
-                <action android:name="com.star.runtracker.LOCATION" />
+                <action android:name="com.star.runtracker.ACTION_LOCATION" />
             </intent-filter>
         </receiver>
     </application>

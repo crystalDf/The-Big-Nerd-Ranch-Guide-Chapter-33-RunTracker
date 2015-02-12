@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,7 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class RunFragment extends Fragment {
+
+    private static final String START_DATE = "startDate";
 
     private Button mStartButton, mStopButton;
     private TextView mStartedTextView, mLatitudeTextView, mLongitudeTextView,
@@ -52,6 +57,12 @@ public class RunFragment extends Fragment {
                 mRunManager.startLocationUpdates();
                 mRun = new Run();
                 mLastLocation = null;
+
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putLong(START_DATE, mRun.getStartDate().getTime())
+                        .commit();
+
                 updateUI();
             }
         });
@@ -61,6 +72,12 @@ public class RunFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mRunManager.stopLocationUpdates();
+
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putLong(START_DATE, 0)
+                        .commit();
+
                 updateUI();
             }
         });
@@ -116,6 +133,13 @@ public class RunFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getActivity().registerReceiver(mLocationReceiver, new IntentFilter(RunManager.ACTION_LOCATION));
+
+        mRun = new Run();
+        long startDateLong = PreferenceManager.
+                getDefaultSharedPreferences(getActivity()).getLong(START_DATE, 0);
+        if (startDateLong != 0) {
+            mRun.setStartDate(new Date(startDateLong));
+        }
     }
 
     @Override
